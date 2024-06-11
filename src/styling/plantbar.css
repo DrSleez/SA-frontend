@@ -1,0 +1,18 @@
+@import url(./colors.css);
+
+.bm-burger-button{
+    margin-top: 0.5em;
+    margin-left: 1em;
+    width:2em;
+    height:2em;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: var(--dark-green);
+    background-blend-mode: normal;
+    padding: 0.2em;
+}
+
