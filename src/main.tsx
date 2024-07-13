@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "@mantine/core/styles.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -6,6 +6,7 @@ import { MantineProvider } from "@mantine/core";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import Nav from "./components/Nav.tsx";
 import App from "./App.tsx";
+import BasketProvider from "./context/BasketContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -16,10 +17,6 @@ const router = createBrowserRouter([
         path: "/",
         element: <App />,
       },
-      {
-        path: "/somePath",
-        element: <div>SomePath</div>,
-      },
     ],
     errorElement: <ErrorPage />,
   },
@@ -28,7 +25,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <MantineProvider>
-      <RouterProvider router={router} />
+      <BasketProvider>
+        <RouterProvider router={router} />
+      </BasketProvider>
     </MantineProvider>
   </React.StrictMode>
 );

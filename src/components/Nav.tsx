@@ -5,17 +5,20 @@ import {
   Anchor,
   Group,
   Stack,
-  Center,
   Title,
   Button,
 } from "@mantine/core";
 import { FaBasketShopping } from "react-icons/fa6";
 import { Outlet } from "react-router-dom";
+import { useBasket } from "../context/BasketContext";
 
 export default function Nav() {
-  const [opened, setOpened] = useState(false);
+  const [navbarOpened, setNavbarOpened] = useState(false);
+  const { openBasket } = useBasket();
 
-  function handleCartClick() {}
+  function handleCartClick() {
+    openBasket();
+  }
 
   return (
     <AppShell
@@ -23,14 +26,17 @@ export default function Nav() {
       navbar={{
         width: 300,
         breakpoint: "sm",
-        collapsed: { desktop: !opened },
+        collapsed: { desktop: !navbarOpened },
       }}
       padding="md"
     >
       <AppShell.Header>
         <Group h="100%" px="md" justify="space-between">
           <Group>
-            <Burger opened={opened} onClick={() => setOpened((o) => !o)} />
+            <Burger
+              opened={navbarOpened}
+              onClick={() => setNavbarOpened((o) => !o)}
+            />
           </Group>
           <Group>
             {" "}
