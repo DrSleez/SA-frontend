@@ -5,9 +5,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import Nav from "./components/Nav.tsx";
-import App from "./App.tsx";
 import BasketProvider from "./context/BasketContext.tsx";
 import UserPage from "./pages/UserPage.tsx";
+import HeroPage from "./pages/HeroPage.tsx";
+import "@mantine/carousel/styles.css";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <App />,
+        element: <HeroPage />,
       },
       {
         path: "/my",

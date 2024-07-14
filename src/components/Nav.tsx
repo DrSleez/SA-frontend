@@ -58,10 +58,9 @@ export default function Nav() {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar>
-        <Stack w="100%" px="md" p="auto">
-          <Anchor>Home</Anchor>
-          <Anchor>Features</Anchor>
-          <Anchor>Pricing</Anchor>
+        <Stack w="100%" px="md" p="auto" pt="1em">
+          <Anchor onClick={() => navigator("/")}>Home</Anchor>
+          <Anchor onClick={() => navigator("/plants")}>Plants</Anchor>
         </Stack>
       </AppShell.Navbar>
       <AppShell.Main>
