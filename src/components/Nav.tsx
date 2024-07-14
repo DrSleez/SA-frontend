@@ -8,16 +8,21 @@ import {
   Title,
   Button,
 } from "@mantine/core";
-import { FaBasketShopping } from "react-icons/fa6";
-import { Outlet } from "react-router-dom";
+import { FaBasketShopping, FaUser } from "react-icons/fa6";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useBasket } from "../context/BasketContext";
 
 export default function Nav() {
   const [navbarOpened, setNavbarOpened] = useState(false);
   const { openBasket } = useBasket();
+  const navigator = useNavigate();
 
   function handleCartClick() {
     openBasket();
+  }
+
+  function handleUserClick() {
+    navigator("/my");
   }
 
   return (
@@ -43,11 +48,10 @@ export default function Nav() {
             <Title>Software Moftware</Title>
           </Group>
           <Group>
-            <Button
-              variant="outline"
-              style={{ marginLeft: "3em" }}
-              onClick={() => handleCartClick()}
-            >
+            <Button variant="transparent" onClick={() => handleUserClick()}>
+              <FaUser size="1.5rem" />
+            </Button>
+            <Button variant="outline" onClick={() => handleCartClick()}>
               <FaBasketShopping size="1.5rem" />
             </Button>
           </Group>

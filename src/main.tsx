@@ -7,6 +7,7 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import Nav from "./components/Nav.tsx";
 import App from "./App.tsx";
 import BasketProvider from "./context/BasketContext.tsx";
+import UserPage from "./pages/UserPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <App />,
+      },
+      {
+        path: "/my",
+        element: <UserPage />,
       },
     ],
     errorElement: <ErrorPage />,
