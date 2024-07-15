@@ -3,7 +3,7 @@ import { Container, Image } from "@mantine/core";
 
 export default function HeroCarousel() {
   const plants = [
-    "/heroPlants/Goldfruchtpalme.webp",
+    "/heroPlants/Goldfruchtpalme16zu9.webp",
     "/heroPlants/Palmlilie.webp",
     "/heroPlants/Zebra-Korbmarante.webp",
   ];
