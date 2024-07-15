@@ -9,6 +9,53 @@ import BasketProvider from "./context/BasketContext.tsx";
 import UserPage from "./pages/UserPage.tsx";
 import HeroPage from "./pages/HeroPage.tsx";
 import "@mantine/carousel/styles.css";
+import LoadingPage from "./pages/LoadingPage/LoadingPage.tsx";
+import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import createStore from "react-auth-kit/createStore";
+import AuthProvider from "react-auth-kit";
+import AuthOutlet from "@auth-kit/react-router/AuthOutlet";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import createRefresh from "react-auth-kit/createRefresh";
+import axios from "axios";
+
+type AuthUser = {
+  role: string;
+  name: string;
+  id: string;
+};
+
+const queryClient = new QueryClient();
+
+const refresh = createRefresh({
+  interval: 10,
+  refreshApiCallback: async (param) => {
+    try {
+      const response = await axios.post("/refresh", param, {
+        headers: { Authorization: `Bearer ${param.authToken}` },
+      });
+      console.log("Refreshing");
+      return {
+        isSuccess: true,
+        newAuthToken: response.data.token,
+        newAuthTokenExpireIn: 10,
+        newRefreshTokenExpiresIn: 60,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        isSuccess: false,
+      };
+    }
+  },
+});
+
+const store = createStore({
+  authName: "_auth",
+  authType: "cookie",
+  cookieDomain: window.location.hostname,
+  cookieSecure: false,
+  refresh: refresh,
+});
 
 const router = createBrowserRouter([
   {
@@ -20,20 +67,44 @@ const router = createBrowserRouter([
         element: <HeroPage />,
       },
       {
-        path: "/my",
-        element: <UserPage />,
+        path: "/loading",
+        element: <LoadingPage />,
+      },
+      {
+        path: "/login",
+        element: <LoginPage />,
       },
     ],
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "/my",
+    element: <Nav />,
+    children: [
+      {
+        path: "/my",
+        element: <AuthOutlet fallbackPath="/login" />,
+        children: [
+          {
+            path: "/my/",
+            element: <UserPage />,
+          },
+        ],
+      },
+    ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <MantineProvider>
-      <BasketProvider>
-        <RouterProvider router={router} />
-      </BasketProvider>
-    </MantineProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider store={store}>
+        <MantineProvider>
+          <BasketProvider>
+            <RouterProvider router={router} />
+          </BasketProvider>
+        </MantineProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
