@@ -1,9 +1,10 @@
-import { useRouteError } from "react-router-dom";
-import { Container, Center, Image, Text, Title } from "@mantine/core";
+import { useNavigate, useRouteError } from "react-router-dom";
+import { Container, Center, Image, Text, Title, Button } from "@mantine/core";
 
 export default function ErrorPage() {
   const error = useRouteError();
   console.error(error);
+  const navigator = useNavigate();
 
   return (
     <Container>
@@ -19,6 +20,9 @@ export default function ErrorPage() {
         <Text color="dimmed" style={{ marginTop: 10 }}>
           Die gesuchte Seite konnte nicht gefunden werden.
         </Text>
+        <Button mt={20} onClick={() => navigator("/")}>
+          Zurück zur Startseite
+        </Button>
       </Center>
     </Container>
   );
