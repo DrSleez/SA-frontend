@@ -8,10 +8,17 @@ import {
   Center,
   SimpleGrid,
 } from "@mantine/core";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import { AuthenticatedUser } from "../interfaces/AuthenticatedUser";
+import getUserIsAdmin from "../utility/getUserIsAdmin";
 
 export default function UserPage() {
+  const authUser = useAuthUser<AuthenticatedUser>();
+  const isAdmin = getUserIsAdmin(authUser);
+
   return (
     <Container>
+      <Title pb={20}>Hello {authUser?.given_name}</Title>
       <SimpleGrid cols={2}>
         <Card shadow="sm" padding="lg" radius="md" withBorder w={350}>
           <Card.Section>
@@ -33,16 +40,18 @@ export default function UserPage() {
             </Text>
           </Container>
         </Card>
-        <Card shadow="sm" padding="lg" radius="md" withBorder w={350}>
-          <Card.Section>
-            <Image src="/mlem.webp" h={200} fit="contain" />
-          </Card.Section>
-          <Container w="100%" h="100%">
-            {" "}
-            <Title>Noch irgendwas</Title>
-            <Text size="sm">Ja irgendwas kannst du hier halt machen</Text>
-          </Container>
-        </Card>
+        {isAdmin ? (
+          <Card shadow="sm" padding="lg" radius="md" withBorder w={350}>
+            <Card.Section>
+              <Image src="/mlem.webp" h={200} fit="contain" />
+            </Card.Section>
+            <Container w="100%" h="100%">
+              {" "}
+              <Title>Neue Pflanze erstellen</Title>
+              <Text size="sm">Erstelle als Admin eine neue Pflanze</Text>
+            </Container>
+          </Card>
+        ) : null}
       </SimpleGrid>
     </Container>
   );

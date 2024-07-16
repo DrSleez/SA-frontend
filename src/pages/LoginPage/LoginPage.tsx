@@ -16,6 +16,8 @@ import { notifications } from "@mantine/notifications";
 import { KeyboardEvent, useState } from "react";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import useLogin from "../../hooks/useLogin";
+import { jwtDecode } from "jwt-decode";
+import { TokenPayload } from "../../interfaces/TokenPayload";
 
 export default function LoginPage() {
   const signIn = useSignIn();
@@ -38,6 +40,7 @@ export default function LoginPage() {
   function handleSubmit(values: { username: string; password: string }) {
     mutation.mutate(values, {
       onSuccess: (data) => {
+        const decodedAccessToken = jwtDecode<TokenPayload>(data.access_token);
         if (
           signIn({
             auth: {
@@ -45,10 +48,18 @@ export default function LoginPage() {
               type: "Bearer",
             },
             refresh: data.refresh_token,
-            userState: {},
+            userState: {
+              name: decodedAccessToken.name,
+              email: decodedAccessToken.email,
+              username: decodedAccessToken.preferred_username,
+              roles:
+                decodedAccessToken.resource_access["frontend-client"]?.roles ||
+                [],
+              given_name: decodedAccessToken.given_name,
+            },
           })
         ) {
-          navigator("/");
+          navigator("/my");
         }
       },
       onError: (error) => {
