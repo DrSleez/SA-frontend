@@ -21,6 +21,7 @@ import GardenPlantsPage from "./pages/GardenPlantsPage.tsx";
 import RoomPlantsPage from "./pages/RoomPlantsPage.tsx";
 import HedgePlantsPage from "./pages/HedgePlantsPage.tsx";
 import TreesPage from "./pages/TreesPage.tsx";
+import PlantDetailsPage from "./pages/PlantDetailsPage/PlantDetailsPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HeroPage />,
+      },
+      {
+        path: "/plant/:id",
+        element: <PlantDetailsPage />,
       },
       {
         path: "/all",
