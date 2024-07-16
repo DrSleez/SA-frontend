@@ -1,16 +1,9 @@
 import { useState } from "react";
-import {
-  AppShell,
-  Burger,
-  Anchor,
-  Group,
-  Stack,
-  Title,
-  Button,
-} from "@mantine/core";
+import { AppShell, Burger, Group, Title, Button } from "@mantine/core";
 import { FaBasketShopping, FaUser } from "react-icons/fa6";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useBasket } from "../context/BasketContext";
+import NavbarLinksGroup from "./NavbarLinksGroup";
 
 export default function Nav() {
   const [navbarOpened, setNavbarOpened] = useState(false);
@@ -29,7 +22,7 @@ export default function Nav() {
     <AppShell
       header={{ height: 60 }}
       navbar={{
-        width: 300,
+        width: 200,
         breakpoint: "sm",
         collapsed: { desktop: !navbarOpened },
       }}
@@ -58,10 +51,7 @@ export default function Nav() {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar>
-        <Stack w="100%" px="md" p="auto" pt="1em">
-          <Anchor onClick={() => navigator("/")}>Home</Anchor>
-          <Anchor onClick={() => navigator("/plants")}>Plants</Anchor>
-        </Stack>
+        <NavbarLinksGroup />
       </AppShell.Navbar>
       <AppShell.Main>
         <Outlet />
