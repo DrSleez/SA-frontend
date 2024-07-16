@@ -16,8 +16,14 @@ export default function HeroPageArrivals() {
   ];
 
   const cards = plants.map((item) => (
-    <Grid.Col span={3} className="column-container" key={item.name}>
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Grid.Col span={3} key={item.name}>
+      <Card
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        className="card-container"
+      >
         <Card.Section>
           <Image src={item.src} h={400} fit="cover" />
         </Card.Section>
