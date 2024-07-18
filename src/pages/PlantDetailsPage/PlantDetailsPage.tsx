@@ -106,7 +106,7 @@ export default function PlantDetailsPage() {
                           );
                         }}
                       >
-                        Zum Warenkorb hinzufügen
+                        Zum Warenkorb
                       </Button>
                     </Flex>
                   </>
