@@ -5,7 +5,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import Nav from "./components/Nav.tsx";
-import BasketProvider from "./context/BasketContext.tsx";
 import UserPage from "./pages/UserPage.tsx";
 import HeroPage from "./pages/HeroPage.tsx";
 import "@mantine/carousel/styles.css";
@@ -22,6 +21,9 @@ import RoomPlantsPage from "./pages/RoomPlantsPage.tsx";
 import HedgePlantsPage from "./pages/HedgePlantsPage.tsx";
 import TreesPage from "./pages/TreesPage.tsx";
 import PlantDetailsPage from "./pages/PlantDetailsPage/PlantDetailsPage.tsx";
+import { Provider } from "react-redux";
+import { store as reduxStore, persistor } from "./redux/store.ts";
+import { PersistGate } from "redux-persist/integration/react";
 
 const queryClient = new QueryClient();
 
@@ -117,13 +119,15 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthProvider store={store}>
-        <MantineProvider>
-          <BasketProvider>
-            <RouterProvider router={router} />
-          </BasketProvider>
-        </MantineProvider>
-      </AuthProvider>
+      <Provider store={reduxStore}>
+        <AuthProvider store={store}>
+          <PersistGate persistor={persistor}>
+            <MantineProvider>
+              <RouterProvider router={router} />
+            </MantineProvider>
+          </PersistGate>
+        </AuthProvider>
+      </Provider>
     </QueryClientProvider>
   </React.StrictMode>
 );

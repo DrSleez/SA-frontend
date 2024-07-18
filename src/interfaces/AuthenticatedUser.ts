@@ -1,5 +1,5 @@
 export interface AuthenticatedUser {
-  access_token?: string;
+  access_token: string;
   name: string;
   username: string;
   given_name: string;

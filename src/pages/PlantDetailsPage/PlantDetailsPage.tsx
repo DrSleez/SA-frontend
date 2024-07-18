@@ -8,12 +8,20 @@ import {
   Text,
   Image,
   Grid,
-  Loader,
   Button,
   Flex,
 } from "@mantine/core";
 import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
-import { useBasket } from "../../context/BasketContext";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addItem,
+  addItemToBackend,
+  removeAllItems,
+  removeItem,
+  removeItemFromBackend,
+} from "../../redux/basketSlice";
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 function useRequiredParams<T extends Record<string, any>>() {
   const params = useParams<T>();
@@ -24,13 +32,14 @@ export default function PlantDetailsPage() {
   const { id } = useRequiredParams<{ id: UUID }>();
   const query = usePlant(id);
   const isAuthenticated = useIsAuthenticated();
-  const {
-    increaseBasketQuantity,
-    decreaseBasketQuantity,
-    removeFromBasket,
-    getItemQuantity,
-  } = useBasket();
-  const quantity = getItemQuantity(id);
+  const authHeader = useAuthHeader();
+  const token = authHeader?.split(" ")[1];
+  const dispatch: AppDispatch = useDispatch();
+  const basket = useSelector((state: RootState) => state.basket);
+  const quantity = basket.items.filter((item) => item.plantId === id).length;
+  const basketItem = useSelector((state: RootState) =>
+    state.basket.items.find((item) => item.plantId === id)
+  );
 
   if (query.isPending) {
     return <LoadingPage />;
@@ -44,16 +53,31 @@ export default function PlantDetailsPage() {
     );
   }
 
+  if (!token) {
+    console.error("No auth token available");
+    return;
+  }
+
+  const itemForBasket = {
+    plantId: query.data.plantId,
+    name: query.data.name,
+    itemPrice: query.data.price,
+    imageLink: query.data.imageLink,
+  };
+
   return (
     <Container fluid>
       <Grid>
-        <Image
-          src={query.data.imageLink}
-          alt={query.data.name}
-          fallbackSrc="https://placehold.co/600x400?text=Placeholder"
-          h="500"
-          w="100%"
-        />
+        <Grid.Col span={3}>
+          <Image
+            src={query.data.imageLink}
+            alt={query.data.name}
+            fallbackSrc="https://placehold.co/600x400?text=Placeholder"
+            h="500"
+            w="100%"
+          />
+        </Grid.Col>
+
         <Grid.Col span={6}>
           <Title>{query.data.name}</Title>
           <Text color="dimmed" size="lg" style={{ marginBottom: "1rem" }}>
@@ -72,53 +96,80 @@ export default function PlantDetailsPage() {
           <Text>
             <strong>Beschreibung:</strong> {query.data.description}
           </Text>
-          {isAuthenticated ? (
-            <>
-              {quantity === 0 ? (
-                <>
-                  <Flex justify={{ sm: "center" }} align="center">
-                    <Button onClick={() => increaseBasketQuantity(id)}>
-                      Add to Basket
-                    </Button>
-                  </Flex>
-                </>
-              ) : (
-                <>
-                  <Flex
-                    gap={{ base: "sm", sm: "lg" }}
-                    justify={{ sm: "center" }}
-                    mb={3}
-                    align="center"
-                  >
-                    <Button
-                      justify="center"
-                      size="sm"
-                      onClick={() => decreaseBasketQuantity(id)}
+          <Grid.Col span={3}>
+            {isAuthenticated ? (
+              <>
+                {quantity === 0 ? (
+                  <>
+                    <Flex justify={{ sm: "center" }} align="center">
+                      <Button
+                        onClick={() => {
+                          dispatch(addItem(itemForBasket));
+                          dispatch(
+                            addItemToBackend({ item: itemForBasket, token })
+                          );
+                        }}
+                      >
+                        Add to Basket
+                      </Button>
+                    </Flex>
+                  </>
+                ) : (
+                  <>
+                    <Flex
+                      gap={{ base: "sm", sm: "lg" }}
+                      justify={{ sm: "center" }}
+                      mb={3}
+                      align="center"
                     >
-                      -
-                    </Button>
-                    <span>{quantity}</span>
-                    <Button
-                      justify="center"
-                      size="sm"
-                      onClick={() => increaseBasketQuantity(id)}
-                    >
-                      +
-                    </Button>
-                  </Flex>
-                  <Flex mt={3} justify={{ sm: "center" }} align="center">
-                    <Button
-                      color="red"
-                      size="sm"
-                      onClick={() => removeFromBasket(id)}
-                    >
-                      Remove from Basket
-                    </Button>
-                  </Flex>
-                </>
-              )}
-            </>
-          ) : null}
+                      <Button
+                        justify="center"
+                        size="sm"
+                        onClick={() => {
+                          dispatch(removeItem(itemForBasket.plantId));
+                          dispatch(
+                            removeItemFromBackend({
+                              item: {
+                                ...itemForBasket,
+                                itemId: basketItem?.itemId,
+                              },
+                              token,
+                            })
+                          );
+                        }}
+                      >
+                        -
+                      </Button>
+                      <span>{quantity}</span>
+                      <Button
+                        justify="center"
+                        size="sm"
+                        onClick={() => {
+                          dispatch(addItem(itemForBasket));
+                          dispatch(
+                            addItemToBackend({ item: itemForBasket, token })
+                          );
+                        }}
+                      >
+                        +
+                      </Button>
+                    </Flex>
+                    <Flex mt={3} justify={{ sm: "center" }} align="center">
+                      <Button
+                        color="red"
+                        size="sm"
+                        onClick={() =>
+                          dispatch(removeAllItems(itemForBasket.plantId))
+                        }
+                      >
+                        Remove from Basket
+                      </Button>
+                    </Flex>
+                  </>
+                )}
+              </>
+            ) : null}
+          </Grid.Col>
         </Grid.Col>
       </Grid>
     </Container>

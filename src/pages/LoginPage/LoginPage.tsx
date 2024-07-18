@@ -18,6 +18,9 @@ import LoadingPage from "../LoadingPage/LoadingPage";
 import useLogin from "../../hooks/useLogin";
 import { jwtDecode } from "jwt-decode";
 import { TokenPayload } from "../../interfaces/TokenPayload";
+import { AppDispatch } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { fetchBasket } from "../../redux/basketSlice";
 
 export default function LoginPage() {
   const signIn = useSignIn();
@@ -26,6 +29,8 @@ export default function LoginPage() {
   const mutation = useLogin();
   const isAuthenticated = useIsAuthenticated();
   const [isCapslockNotificated, setIsCapslockNotificated] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
+
   const form = useForm({
     initialValues: {
       username: "",
@@ -41,6 +46,7 @@ export default function LoginPage() {
     mutation.mutate(values, {
       onSuccess: (data) => {
         const decodedAccessToken = jwtDecode<TokenPayload>(data.access_token);
+        dispatch(fetchBasket(data.access_token));
         if (
           signIn({
             auth: {

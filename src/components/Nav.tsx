@@ -2,20 +2,24 @@ import { useState } from "react";
 import { AppShell, Burger, Group, Title, Button } from "@mantine/core";
 import { FaBasketShopping, FaUser } from "react-icons/fa6";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useBasket } from "../context/BasketContext";
 import NavbarLinksGroup from "./NavbarLinksGroup";
 import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
 import useSignOut from "react-auth-kit/hooks/useSignOut";
+import Basket from "./Basket/Basket";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
+import { clearBasket } from "../redux/basketSlice";
 
 export default function Nav() {
   const [navbarOpened, setNavbarOpened] = useState(false);
-  const { openBasket } = useBasket();
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const navigator = useNavigate();
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
+  const dispatch: AppDispatch = useDispatch();
 
   function handleCartClick() {
-    openBasket();
+    setIsCartOpen(true);
   }
 
   function handleUserClick() {
@@ -24,6 +28,7 @@ export default function Nav() {
 
   function handleLogout() {
     signOut();
+    dispatch(clearBasket());
     navigator("/login");
   }
 
@@ -72,6 +77,10 @@ export default function Nav() {
         <NavbarLinksGroup />
       </AppShell.Navbar>
       <AppShell.Main>
+        <Basket
+          isOpen={isCartOpen}
+          closeBasket={() => setIsCartOpen((prev) => !prev)}
+        />
         <Outlet />
       </AppShell.Main>
     </AppShell>
