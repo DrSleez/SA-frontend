@@ -11,6 +11,9 @@ import {
 import getUserIsAdmin from "../utility/getUserIsAdmin";
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import { AuthenticatedUser } from "../interfaces/AuthenticatedUser";
+import useNewPlant from "../hooks/useNewPlant";
+import { useNavigate } from "react-router-dom";
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 interface PlantFormValues {
   name: string;
@@ -26,8 +29,11 @@ interface PlantFormValues {
 
 export default function NewPlant() {
   const authUser = useAuthUser<AuthenticatedUser>();
-  const token = authUser?.access_token;
+  const authHeader = useAuthHeader();
+  const token = authHeader?.split(" ")[1];
   const isAdmin = getUserIsAdmin(authUser);
+  const mutation = useNewPlant(token);
+  const navigator = useNavigate();
 
   if (!isAdmin) {
     return <Title>Kein Admin, sorry</Title>;
@@ -59,8 +65,11 @@ export default function NewPlant() {
   });
 
   const handleSubmit = (values: PlantFormValues) => {
-    console.log(values);
-    // Hier können Sie die Formulardaten verarbeiten, z.B. an eine API senden
+    mutation.mutate(values, {
+      onSuccess: (data) => {
+        navigator("/plant/" + data.plantId);
+      },
+    });
   };
 
   return (

@@ -1,7 +1,7 @@
 import { UUID } from "crypto";
 
 export interface Plant {
-  plantId: UUID;
+  plantId?: UUID;
   name: string;
   latinName: string;
   price: number;

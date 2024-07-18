@@ -43,6 +43,7 @@ export default function BasketEntry({ item }: BasketEntryProps) {
           <Image
             radius="md"
             src={item.imageLink}
+            fallbackSrc="https://placehold.co/600x400?text=Placeholder"
             h={100}
             w="auto"
             onClick={() => handleProductClick()}
