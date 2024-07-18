@@ -39,9 +39,9 @@ export default function RoomPlantsPage() {
         </Card.Section>
         <Group justify="space-between" mt="md" mb="xs">
           <Text fw={500}>{item.name}</Text>
-          <Text fw={400}>{item.latinName}</Text>
+          <Text fw={50}>{item.price}€</Text>
         </Group>
-        <Text fw={50}>{item.price}€</Text>
+        <Text fw={400}>{item.latinName}</Text>
       </Card>
     </Grid.Col>
   ));
