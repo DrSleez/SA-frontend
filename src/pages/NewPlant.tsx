@@ -65,11 +65,14 @@ export default function NewPlant() {
   });
 
   const handleSubmit = (values: PlantFormValues) => {
-    mutation.mutate(values, {
-      onSuccess: (data) => {
-        navigator("/plant/" + data.plantId);
-      },
-    });
+    mutation.mutate(
+      { ...values, plantId: "00000000-0000-0000-0000-000000000000" },
+      {
+        onSuccess: (data) => {
+          navigator("/plant/" + data.plantId);
+        },
+      }
+    );
   };
 
   return (

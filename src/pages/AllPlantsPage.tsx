@@ -1,4 +1,4 @@
-import { Badge, Card, Grid, Group, Image, Text, Title } from "@mantine/core";
+import { Card, Grid, Group, Image, Text, Title } from "@mantine/core";
 import useAllPlants from "../hooks/useAllPlants";
 import LoadingPage from "./LoadingPage/LoadingPage";
 import { useNavigate } from "react-router-dom";

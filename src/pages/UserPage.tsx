@@ -1,13 +1,4 @@
-import {
-  Card,
-  Container,
-  Grid,
-  Title,
-  Text,
-  Image,
-  Center,
-  SimpleGrid,
-} from "@mantine/core";
+import { Card, Container, Title, Text, Image, SimpleGrid } from "@mantine/core";
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import { AuthenticatedUser } from "../interfaces/AuthenticatedUser";
 import getUserIsAdmin from "../utility/getUserIsAdmin";

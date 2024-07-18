@@ -1,9 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "./store";
 import { BasketItem } from "../interfaces/BasketItem";
 import axios from "axios";
-import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 export interface BasketState {
   username: string;

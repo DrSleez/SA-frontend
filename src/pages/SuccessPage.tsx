@@ -1,14 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import useCheckoutSuccess from "../hooks/useCheckoutSuccess";
 import LoadingPage from "./LoadingPage/LoadingPage";
-import {
-  Container,
-  Group,
-  SimpleGrid,
-  Table,
-  Title,
-  Text,
-} from "@mantine/core";
+import { Container, Table, Title, Text } from "@mantine/core";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { AppDispatch } from "../redux/store";
 import { useDispatch } from "react-redux";

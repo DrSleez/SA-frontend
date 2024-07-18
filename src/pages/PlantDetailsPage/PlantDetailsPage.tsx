@@ -16,10 +16,11 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addItemToBackend,
-  removeAllItems,
   removeItemFromBackend,
 } from "../../redux/basketSlice";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import getUserIsAdmin from "../../utility/getUserIsAdmin";
 
 function useRequiredParams<T extends Record<string, any>>() {
   const params = useParams<T>();
@@ -31,6 +32,8 @@ export default function PlantDetailsPage() {
   const query = usePlant(id);
   const isAuthenticated = useIsAuthenticated();
   const authHeader = useAuthHeader();
+  const authUser = useAuthUser();
+  const isAdmin = getUserIsAdmin(authUser);
   const token = authHeader?.split(" ")[1];
   const dispatch: AppDispatch = useDispatch();
   const basket = useSelector((state: RootState) => state.basket);
