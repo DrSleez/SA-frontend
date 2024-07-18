@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { AppShell, Burger, Group, Title, Button } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Group,
+  Title,
+  Button,
+  Autocomplete,
+  TextInput,
+} from "@mantine/core";
 import { FaBasketShopping, FaUser } from "react-icons/fa6";
 import { Outlet, useNavigate } from "react-router-dom";
 import NavbarLinksGroup from "./NavbarLinksGroup";
@@ -9,9 +17,11 @@ import Basket from "./Basket/Basket";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { clearBasket } from "../redux/basketSlice";
+import { CiSearch } from "react-icons/ci";
 
 export default function Nav() {
   const [navbarOpened, setNavbarOpened] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const navigator = useNavigate();
   const isAuthenticated = useIsAuthenticated();
@@ -24,6 +34,10 @@ export default function Nav() {
 
   function handleUserClick() {
     navigator("/my");
+  }
+
+  function handleSearchSubmit() {
+    navigator("/search/" + searchValue);
   }
 
   function handleLogout() {
@@ -49,9 +63,17 @@ export default function Nav() {
               opened={navbarOpened}
               onClick={() => setNavbarOpened((o) => !o)}
             />
+            <form onSubmit={handleSearchSubmit}>
+              <TextInput
+                value={searchValue}
+                onChange={(event) => setSearchValue(event.currentTarget.value)}
+                placeholder="Suche"
+                leftSection={<CiSearch />}
+                visibleFrom="xs"
+              />
+            </form>
           </Group>
           <Group>
-            {" "}
             <Title>Software Moftware</Title>
           </Group>
           <Group>

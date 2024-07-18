@@ -5,7 +5,8 @@ import { BasketItem } from "../interfaces/BasketItem";
 import axios from "axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
-interface BasketState {
+export interface BasketState {
+  username: string;
   items: BasketItem[];
   totalPrice: number;
   status: "idle" | "loading" | "succeeded" | "failed";
@@ -13,6 +14,7 @@ interface BasketState {
 }
 
 const initialState: BasketState = {
+  username: "",
   items: [],
   totalPrice: 0,
   status: "idle",

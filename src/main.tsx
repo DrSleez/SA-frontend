@@ -24,6 +24,8 @@ import PlantDetailsPage from "./pages/PlantDetailsPage/PlantDetailsPage.tsx";
 import { Provider } from "react-redux";
 import { store as reduxStore, persistor } from "./redux/store.ts";
 import { PersistGate } from "redux-persist/integration/react";
+import SearchPlantPage from "./pages/SearchPlantPage.tsx";
+import SuccessPage from "./pages/SuccessPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +72,14 @@ const router = createBrowserRouter([
       {
         path: "/plant/:id",
         element: <PlantDetailsPage />,
+      },
+      {
+        path: "/search/:search",
+        element: <SearchPlantPage />,
+      },
+      {
+        path: "/success",
+        element: <SuccessPage />,
       },
       {
         path: "/all",
