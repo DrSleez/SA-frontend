@@ -26,6 +26,9 @@ import { store as reduxStore, persistor } from "./redux/store.ts";
 import { PersistGate } from "redux-persist/integration/react";
 import SearchPlantPage from "./pages/SearchPlantPage.tsx";
 import SuccessPage from "./pages/SuccessPage.tsx";
+import OrdersPage from "./pages/OrdersPage.tsx";
+import CancelPage from "./pages/CancelPage.tsx";
+import NewPlant from "./pages/NewPlant.tsx";
 
 const queryClient = new QueryClient();
 
@@ -82,6 +85,10 @@ const router = createBrowserRouter([
         element: <SuccessPage />,
       },
       {
+        path: "/cancel",
+        element: <CancelPage />,
+      },
+      {
         path: "/all",
         element: <AllPlantsPage />,
       },
@@ -119,6 +126,14 @@ const router = createBrowserRouter([
           {
             path: "/my/",
             element: <UserPage />,
+          },
+          {
+            path: "/my/orders",
+            element: <OrdersPage />,
+          },
+          {
+            path: "/my/newPlant",
+            element: <NewPlant />,
           },
         ],
       },

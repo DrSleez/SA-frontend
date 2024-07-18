@@ -2,30 +2,27 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { CheckoutResponse } from "../interfaces/CheckoutResponse";
 
-const checkoutSuccessURL = import.meta.env.VITE_CHECKOUT_SUCCESS_URL;
+const checkoutCancelURL = import.meta.env.VITE_CHECKOUT_CANCEL_URL;
 
-async function getSuccess(
-  id: string,
-  token: string
-): Promise<CheckoutResponse> {
+async function getCancel(id: string, token: string): Promise<CheckoutResponse> {
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
   try {
     const response = await axios.get<CheckoutResponse>(
-      `${checkoutSuccessURL}=${id}`,
+      `${checkoutCancelURL}=${id}`,
       config
     );
     return response.data;
   } catch (error) {
-    throw new Error("Failed to get checkout success" + error);
+    throw new Error("Failed to get checkout cancel" + error);
   }
 }
 
-export default function useCheckoutSuccess(id: string, token: string) {
+export default function useCheckoutCancel(id: string, token: string) {
   const query = useQuery({
-    queryKey: ["checkout", id],
-    queryFn: () => getSuccess(id, token),
+    queryKey: ["checkout", "cancel", id],
+    queryFn: () => getCancel(id, token),
   });
   return query;
 }
