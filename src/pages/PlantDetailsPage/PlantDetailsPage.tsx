@@ -15,10 +15,8 @@ import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addItem,
   addItemToBackend,
   removeAllItems,
-  removeItem,
   removeItemFromBackend,
 } from "../../redux/basketSlice";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
@@ -53,11 +51,6 @@ export default function PlantDetailsPage() {
     );
   }
 
-  if (!token) {
-    console.error("No auth token available");
-    return;
-  }
-
   const itemForBasket = {
     plantId: query.data.plantId,
     name: query.data.name,
@@ -75,6 +68,7 @@ export default function PlantDetailsPage() {
             fallbackSrc="https://placehold.co/600x400?text=Placeholder"
             h="500"
             w="100%"
+            radius="md"
           />
         </Grid.Col>
 
@@ -101,16 +95,15 @@ export default function PlantDetailsPage() {
               <>
                 {quantity === 0 ? (
                   <>
-                    <Flex justify={{ sm: "center" }} align="center">
+                    <Flex mt={20}>
                       <Button
                         onClick={() => {
-                          dispatch(addItem(itemForBasket));
                           dispatch(
                             addItemToBackend({ item: itemForBasket, token })
                           );
                         }}
                       >
-                        Add to Basket
+                        Zum Warenkorb hinzufügen
                       </Button>
                     </Flex>
                   </>
@@ -118,15 +111,14 @@ export default function PlantDetailsPage() {
                   <>
                     <Flex
                       gap={{ base: "sm", sm: "lg" }}
-                      justify={{ sm: "center" }}
                       mb={3}
                       align="center"
+                      mt={20}
                     >
                       <Button
                         justify="center"
                         size="sm"
                         onClick={() => {
-                          dispatch(removeItem(itemForBasket.plantId));
                           dispatch(
                             removeItemFromBackend({
                               item: {
@@ -145,24 +137,12 @@ export default function PlantDetailsPage() {
                         justify="center"
                         size="sm"
                         onClick={() => {
-                          dispatch(addItem(itemForBasket));
                           dispatch(
                             addItemToBackend({ item: itemForBasket, token })
                           );
                         }}
                       >
                         +
-                      </Button>
-                    </Flex>
-                    <Flex mt={3} justify={{ sm: "center" }} align="center">
-                      <Button
-                        color="red"
-                        size="sm"
-                        onClick={() =>
-                          dispatch(removeAllItems(itemForBasket.plantId))
-                        }
-                      >
-                        Remove from Basket
                       </Button>
                     </Flex>
                   </>

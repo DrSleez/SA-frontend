@@ -11,7 +11,9 @@ export default function Basket({ isOpen, closeBasket }: BasketProps) {
   const dispatch: AppDispatch = useDispatch();
   const basket = useSelector((state: RootState) => state.basket);
 
-  const basketItems = basket.items.map((item) => <BasketEntry item={item} />);
+  const basketItems = basket.items.map((item) => (
+    <BasketEntry item={item} key={item.itemId} />
+  ));
 
   return (
     <Drawer

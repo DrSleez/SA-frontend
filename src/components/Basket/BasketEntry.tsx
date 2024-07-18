@@ -1,8 +1,8 @@
 import { Grid, Image, Stack, Text, Flex, Button } from "@mantine/core";
 import { BasketItem } from "../../interfaces/BasketItem";
-import { AppDispatch, RootState } from "../../redux/store";
-import { useDispatch, useSelector } from "react-redux";
-import { removeItem, removeItemFromBackend } from "../../redux/basketSlice";
+import { AppDispatch } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { removeItemFromBackend } from "../../redux/basketSlice";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import "./BasketEntry.css";
 import { useNavigate } from "react-router-dom";
@@ -13,9 +13,6 @@ type BasketEntryProps = {
 
 export default function BasketEntry({ item }: BasketEntryProps) {
   const dispatch: AppDispatch = useDispatch();
-  const basketItem = useSelector((state: RootState) =>
-    state.basket.items.find((item) => item.plantId === item.plantId)
-  );
   const authHeader = useAuthHeader();
   const token = authHeader?.split(" ")[1];
   const navigator = useNavigate();
@@ -29,12 +26,10 @@ export default function BasketEntry({ item }: BasketEntryProps) {
   }
 
   function handleRemove() {
-    dispatch(removeItem(item.plantId));
     dispatch(
       removeItemFromBackend({
         item: {
           ...item,
-          itemId: basketItem?.itemId,
         },
         token,
       })
@@ -43,7 +38,7 @@ export default function BasketEntry({ item }: BasketEntryProps) {
 
   return (
     <>
-      <Grid columns={24}>
+      <Grid columns={24} key={item.itemId}>
         <Grid.Col span={6}>
           <Image
             radius="md"

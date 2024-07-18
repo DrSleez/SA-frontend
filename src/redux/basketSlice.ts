@@ -95,15 +95,15 @@ export const basketSlice = createSlice({
       .addCase(
         addItemToBackend.fulfilled,
         (state, action: PayloadAction<BasketState>) => {
-          const addedItem = state.items.find((item) => item.itemId === null);
-          if (addedItem) {
-            const updatedItem = action.payload.items.find(
-              (item) => item.plantId === addedItem.plantId
-            );
-            if (updatedItem) {
-              addedItem.itemId = updatedItem.itemId;
-            }
-          }
+          state.items = action.payload.items;
+          state.totalPrice = action.payload.totalPrice;
+        }
+      )
+      .addCase(
+        removeItemFromBackend.fulfilled,
+        (state, action: PayloadAction<BasketState>) => {
+          state.items = action.payload.items;
+          state.totalPrice = action.payload.totalPrice;
         }
       )
       .addCase(fetchBasket.pending, (state) => {
